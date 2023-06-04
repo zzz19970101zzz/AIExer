@@ -3,10 +3,11 @@ from utils.features import prepare_for_training
 
 class LinearRegression:
     def __init__(self,data,labels,polynomial_degree = 0,sinusoid_degree = 0,normalize_data=True):
-        [data_processed,
+        (data_processed,
          features_mean,
-         features_deviation] = prepare_for_training(data,labels,polynomial_degree = 0,sinusoid_degree = 0,normalize_data=True)
+         features_deviation) = prepare_for_training(data,polynomial_degree ,sinusoid_degree ,normalize_data=True)
         self.data = data_processed
+        self.labels = labels
         self.features_mean = features_mean
         self.features_deviation = features_deviation
         self.polynomial_degree = polynomial_degree
@@ -37,7 +38,7 @@ class LinearRegression:
     def cost_function(self,data,labels):
         num_examples = data.shape[0]
         delta = LinearRegression.hypothesis(self.data,self.theta) - labels
-        cost = (1/2)*np.dot(delta.T,delta)
+        cost = (1/2)*np.dot(delta.T,delta)/num_examples
         return cost[0][0]
     @staticmethod
     def hypothesis(data,theta):
@@ -54,3 +55,4 @@ class LinearRegression:
         data_processed = prepare_for_training(data, self.polynomial_degree,
                                               self.sinusoid_degree, self.normalize_data)[0]
         predictions = LinearRegression.hypothesis(data_processed,self.theta)
+        return predictions
